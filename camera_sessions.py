@@ -9,37 +9,17 @@ from __future__ import annotations
 
 import json
 import os
-import subprocess
 import sys
 import threading
 from pathlib import Path
 
 import streamlit as st
-from streamlit.runtime.runtime import Runtime
 from streamlit.runtime.scriptrunner import get_script_run_ctx
+
+from util import current_rss_mib, upload_manager_totals
 
 METRICS_PATH = Path(__file__).with_name("camera_session_metrics.json")
 _WRITE_LOCK = threading.Lock()
-
-
-def current_rss_mib() -> float:
-    statm = Path("/proc/self/statm")
-    if statm.exists():
-        pages = int(statm.read_text().split()[1])
-        return pages * os.sysconf("SC_PAGE_SIZE") / (1024 * 1024)
-    out = subprocess.check_output(
-        ["ps", "-o", "rss=", "-p", str(os.getpid())],
-        text=True,
-    )
-    return int(out.strip()) / 1024
-
-
-def upload_manager_totals() -> tuple[int, int, int]:
-    runtime = Runtime.instance()
-    manager = runtime.uploaded_file_mgr
-    with manager._lock:
-        sessions = len(manager.file_storage)
-        return manager._file_count, manager._total_bytes, sessions
 
 
 def write_metrics(payload: dict) -> None:
