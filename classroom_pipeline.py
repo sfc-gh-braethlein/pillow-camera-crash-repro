@@ -12,6 +12,7 @@ import io
 import queue
 import threading
 import time as time_module
+from urllib.parse import quote
 
 from PIL import Image, ImageOps
 
@@ -68,7 +69,7 @@ def compress_camera_image_bytes(
 def stub_drive_upload(compressed_photo: bytes, filename: str) -> str:
     time_module.sleep(DRIVE_STUB_SECONDS)
     digest = hashlib.sha256(compressed_photo).hexdigest()[:12]
-    return f"https://example.invalid/file/{digest}/{filename}"
+    return f"https://example.invalid/file/{digest}/{quote(filename, safe='')}"
 
 
 class DrivePhotoUploadPool:
