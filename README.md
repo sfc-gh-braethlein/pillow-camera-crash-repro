@@ -15,5 +15,6 @@ submissions.
 
 - **Camera input:** open many browser tabs of that page and capture 720p photos together. The page does not decode JPEGs with Pillow.
 - **Pillow workers:** start with Historical shape (3 workers, 9 submissions). Optionally feed a camera JPEG. A native crash of the child process is reported in the UI without taking down the script runner immediately.
+- **Classroom submit:** in-process copy of the historical attendance flow (3 Drive workers, Pillow compress, blocking wait, sheet batcher). Open many tabs, capture, type 20+ characters, click Submit Attendance.
 
 Pins: Streamlit 1.63.0, Pillow 12.3.0.
